@@ -38,6 +38,15 @@ function getDisplayName(user?: { firstName?: string; lastName?: string; userName
   return user.userName?.trim() ? user.userName : "—";
 }
 
+function formatBookingEventTimeRange(booking: Booking): string {
+  const start = dayjs.utc(booking.startTime);
+  const end = dayjs.utc(booking.endTime);
+  if (!start.isValid() || !end.isValid()) {
+    return "—";
+  }
+  return `${start.format("HH:mm")} – ${end.format("HH:mm")}`;
+}
+
 const Calendar: React.FC = () => {
   const [events, setEvents] = useState<BookingEvent[]>([]);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
@@ -127,17 +136,32 @@ const Calendar: React.FC = () => {
     const props = eventInfo.event.extendedProps as {
       status: string;
       isPast: boolean;
+      booking: Booking;
     };
     const colorClass = `fc-bg-${props.status}`;
     const isConfirmed = props.status === "success";
+    const timeRangeLabel = formatBookingEventTimeRange(props.booking);
+    const isMonthView = eventInfo.view.type === "dayGridMonth";
+    const eventShellClass = isMonthView
+      ? "event-fc-color event-fc-color--month flex min-w-0 flex-1 cursor-pointer flex-col gap-0.5 rounded-sm px-1 py-0.5 fc-event-main"
+      : "event-fc-color flex min-w-0 flex-1 cursor-pointer items-center gap-1 rounded-sm px-1.5 py-1 fc-event-main";
 
     return (
       <div
-        className={`event-fc-color flex cursor-pointer fc-event-main ${colorClass} p-1 rounded-sm ${props.isPast ? "opacity-60" : ""} ${isConfirmed ? "border-l-4 border-l-success-500" : ""}`}
+        className={`${eventShellClass} ${colorClass} ${props.isPast ? "opacity-60" : ""} ${isConfirmed ? "border-l-2 border-l-success-500" : ""}`}
       >
-        <div className="fc-daygrid-event-dot" />
-        <div className="fc-event-time">{eventInfo.timeText}</div>
-        <div className="fc-event-title">{eventInfo.event.title}</div>
+        {!isMonthView ? <div className="fc-daygrid-event-dot shrink-0" /> : null}
+        {isMonthView ? (
+          <>
+            <div className="fc-event-time shrink-0 leading-none">{timeRangeLabel}</div>
+            <div className="fc-event-title min-w-0 truncate leading-tight">{eventInfo.event.title}</div>
+          </>
+        ) : (
+          <>
+            <div className="fc-event-time shrink-0">{timeRangeLabel}</div>
+            <div className="fc-event-title min-w-0 truncate">{eventInfo.event.title}</div>
+          </>
+        )}
       </div>
     );
   };
@@ -180,7 +204,15 @@ const Calendar: React.FC = () => {
             if (currentUser?.role !== "TRAINEE") return [];
             return ["cursor-pointer"];
           }}
-          height="auto"
+          views={{
+            dayGridMonth: {
+              dayMaxEvents: true,
+              moreLinkClick: "popover",
+              aspectRatio: 1.48,
+            },
+            timeGridWeek: { height: "auto" },
+            timeGridDay: { height: "auto" },
+          }}
         />
       </div>
 
