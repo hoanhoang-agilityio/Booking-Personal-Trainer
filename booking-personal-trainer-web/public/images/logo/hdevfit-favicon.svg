@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="HDevFit">
+  <title>HDevFit</title>
+  <defs>
+    <linearGradient
+      id="hdevfitFaviconGrad"
+      x1="10"
+      y1="32"
+      x2="54"
+      y2="32"
+      gradientUnits="userSpaceOnUse"
+    >
+      <stop offset="0" stop-color="#8B5CF6" />
+      <stop offset="1" stop-color="#22D3EE" />
+    </linearGradient>
+  </defs>
+  <rect x="10" y="22" width="6" height="20" rx="3" fill="url(#hdevfitFaviconGrad)" />
+  <rect x="18" y="16" width="6" height="32" rx="3" fill="url(#hdevfitFaviconGrad)" />
+  <rect x="27" y="15" width="7" height="34" rx="3.5" fill="url(#hdevfitFaviconGrad)" />
+  <rect x="28" y="29" width="18" height="6" rx="3" fill="url(#hdevfitFaviconGrad)" />
+  <rect x="40" y="15" width="7" height="34" rx="3.5" fill="url(#hdevfitFaviconGrad)" />
+  <rect x="50" y="16" width="6" height="32" rx="3" fill="url(#hdevfitFaviconGrad)" />
+  <rect x="57" y="22" width="6" height="20" rx="3" fill="url(#hdevfitFaviconGrad)" />
+</svg>
